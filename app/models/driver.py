@@ -59,6 +59,7 @@ class DriversPool(BaseModel, db.Model):
     driver = db.relationship(Driver.__name__,
                              backref=db.backref(__tablename__, lazy='dynamic'))
     capacity = db.Column(db.Integer, nullable=False)
+    current_passengers = db.Column(db.Integer, default=0)  # This refer to number of passenger the driver has
 
     def __init__(self, driver):
         self.driver = driver
