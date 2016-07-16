@@ -34,7 +34,7 @@ class Driver(BaseModel, db.Model):
     def get_full_name(self):
         return "{} {}".format(self.first_name, self.last_name)
 
-    def jsonify(self):
+
         return jsonify(
             driver_api_id=self.driver_id,
             first_name=self.first_name,
@@ -55,13 +55,13 @@ class Driver(BaseModel, db.Model):
 class DriversPool(BaseModel, db.Model):
     __tablename__ = 'drivers_pool'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    driver_id = db.Column(db.String(255), db.ForeignKey(Driver.__tablename__ + '.driver_id'))
+    driver_id = db.Column(db.String(255), db.ForeignKey(Driver.__tablename__ + '.driver_id'), nullable=False)
     driver = db.relationship(Driver.__name__,
                              backref=db.backref(__tablename__, lazy='dynamic'))
+    capacity = db.Column(db.Integer, nullable=False)
 
     def __init__(self, driver):
         self.driver = driver
 
     def __repr__(self):
         return "<In Driver Pool: %s>" % self.driver.get_full_name()
-
