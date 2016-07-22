@@ -2,7 +2,7 @@ import datetime
 import uuid
 
 from app.models.base import db, BaseModel
-from app.models.tools import ModelHelper
+from app.core.tools import ModelHelper
 
 
 class Passenger(BaseModel, db.Model):
@@ -14,7 +14,7 @@ class Passenger(BaseModel, db.Model):
     date_of_birth = db.Column(db.Date, nullable=False)
     email = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    phone_number = db.Column(db.String(15), unique=True)
+    phone_number = db.Column(db.String(50), unique=True)
     date_joined = db.Column(db.DateTime, default=datetime.datetime.now())
     is_active = db.Column(db.Boolean, default=False)
 

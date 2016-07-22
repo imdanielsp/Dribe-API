@@ -1,0 +1,49 @@
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 315-825-076
+INFO:app.core.core:Added to complete table : <Ride: [Driver: <Driver: ID=21eb854f-fa04-4000-b900-706adcdf27e5 Name=John_Smith> Passenger: <Passenger: Steve Jobs> Status: ride_completed Created On: 2016-07-18 04:13:08]>
+INFO:app.core.core:Current capacity updated : <Driver: ID=21eb854f-fa04-4000-b900-706adcdf27e5 Name=John_Smith>
+INFO:werkzeug:127.0.0.1 - - [18/Jul/2016 04:45:15] "GET / HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/Users/dsantos/Dribe/Project/Dribe-API/app/core/core.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 315-825-076
+INFO:app.core.core:Added to complete table : <Ride: [Driver: <Driver: ID=21eb854f-fa04-4000-b900-706adcdf27e5 Name=John_Smith> Passenger: <Passenger: Steve Jobs> Status: ride_completed Created On: 2016-07-18 04:13:08]>
+INFO:app.core.core:Current capacity updated : <Driver: ID=21eb854f-fa04-4000-b900-706adcdf27e5 Name=John_Smith>
+INFO:werkzeug:127.0.0.1 - - [18/Jul/2016 04:45:25] "GET / HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/Users/dsantos/Dribe/Project/Dribe-API/app/core/core.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 315-825-076
+INFO:werkzeug: * Detected change in '/Users/dsantos/Dribe/Project/Dribe-API/app/core/core.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 315-825-076
+INFO:werkzeug:127.0.0.1 - - [18/Jul/2016 04:47:24] "GET / HTTP/1.1" 500 -
+INFO:werkzeug: * Detected change in '/Users/dsantos/Dribe/Project/Dribe-API/app/core/core.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 315-825-076
+INFO:werkzeug: * Detected change in '/Users/dsantos/Dribe/Project/Dribe-API/app/core/core.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 315-825-076
+INFO:werkzeug:127.0.0.1 - - [18/Jul/2016 04:47:40] "GET / HTTP/1.1" 500 -
+INFO:werkzeug: * Detected change in '/Users/dsantos/Dribe/Project/Dribe-API/app/core/core.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 315-825-076
+INFO:werkzeug:127.0.0.1 - - [18/Jul/2016 04:47:49] "GET / HTTP/1.1" 500 -
+INFO:werkzeug: * Detected change in '/Users/dsantos/Dribe/Project/Dribe-API/app/core/core.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 315-825-076
+INFO:werkzeug: * Detected change in '/Users/dsantos/Dribe/Project/Dribe-API/app/core/core.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger pin code: 315-825-076
+INFO:werkzeug: * Detected change in '/Users/dsantos/Dribe/Project/Dribe-API/app/core/core.py', reloading
+INFO:werkzeug: * Restarting with stat

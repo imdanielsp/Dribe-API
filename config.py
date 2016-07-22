@@ -1,7 +1,8 @@
 import os
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-URL_PREFIX = "/api/v1"
+API_VERSION = '1'
+URL_PREFIX = "/dribe/api/v{}".format(API_VERSION)
 HOST = "127.0.0.1"
 PORT = 5000
 DEBUG = True
@@ -19,3 +20,27 @@ SQLALCHEMY_DATABASE_URI = "mysql+pymysql://{USERNAME}:{PASSWORD}@{LOCATION}:{POR
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 RESET_DB = False
+
+GOOGLE_API_KEY = "AIzaSyD-t8oUqqOg7uWTqV6n7zSBmyNluRQyPew"
+
+
+def reset_system(db):
+	if RESET_DB:
+		db.drop_all()
+		db.create_all()
+		distance_rate = {
+			"price": 2.5,
+			"distance": 1
+		}
+		time_rate = {
+			"price": 0.50,
+			"time": 1
+		}
+		base_rate = 2.50
+		peak_surcharge = 1.0
+		from app.models.settings import Settings
+		from app.models.user import User
+		Settings("Liberty", base_rate, distance_rate, time_rate, peak_surcharge).create()
+		User("Daniel", "Santos", "dsantosp12", "dribe1234").create()
+	else:
+		db.create_all()

@@ -10,3 +10,10 @@ class BaseModel():
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+    def get_dict(self):
+    	raise NotImplementedError
+
+    @staticmethod
+    def build_from_args(**kwargs):
+    	raise NotImplementedError
