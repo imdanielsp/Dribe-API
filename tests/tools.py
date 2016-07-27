@@ -66,3 +66,6 @@ class ModelFactory:
             driver, 4, 42.698645, -71.157182
         )
 
+    @staticmethod
+    def make_driver_offline(driver):
+        return DriverHandler.make_driver_offline(driver)

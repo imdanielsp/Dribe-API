@@ -31,5 +31,37 @@ class Passenger(BaseModel, db.Model):
     def __repr__(self):
         return "<Passenger: %s %s>" % (self.first_name, self.last_name)
 
+    def update(self, **kwargs):
+        self.first_name = kwargs['first_name']
+        self.last_name = kwargs['last_name']
+        self.date_of_birth = kwargs['date_of_birth']
+        self.email = kwargs['email']
+        self.password = ModelHelper.hash_password(kwargs['password'])
+        self.phone_number = kwargs['phone_number']
+        db.session.commit()
+        return self
+
     def get_full_name(self):
         return "%s %s" % (self.first_name, self.last_name)
+
+    def get_dict(self):
+        return {
+            'id': self.id,
+            'passenger_id': self.passenger_id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'date_of_birth': self.date_of_birth,
+            'email': self.email,
+            'password': self.password,
+            'phone_number': self.password,
+            'date_joined': self.date_joined,
+            'is_active': self.is_active
+        }
+
+    @staticmethod
+    def get_by_id(passenger_id):
+        return Passenger.query.filter_by(passenger_id=passenger_id).first()
+
+    @staticmethod
+    def get_all():
+        return Passenger.query.all()

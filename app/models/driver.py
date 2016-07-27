@@ -33,6 +33,18 @@ class Driver(BaseModel, db.Model):
 
     def __repr__(self):
         return "<Driver: ID=%s Name=%s_%s>" % (self.driver_id, self.first_name, self.last_name)
+    
+    def update(self, **kwargs):
+        self.first_name = kwargs['first_name']
+        self.last_name = kwargs['last_name']
+        self.date_of_birth = kwargs['date_of_birth']
+        self.address = kwargs['address']
+        self.email = kwargs['email']
+        self.password = ModelHelper.hash_password(kwargs['password'])
+        self.phone_number = kwargs['phone_number']
+        self.company = kwargs['company']
+        db.session.commit()
+        return self
 
     def get_full_name(self):
         return "{} {}".format(self.first_name, self.last_name)
@@ -51,18 +63,6 @@ class Driver(BaseModel, db.Model):
                     'date_joined': self.date_joined.__str__(),
                     'company': self.company
                 }
-
-    def update(self, **kwargs):
-        self.first_name = kwargs['first_name']
-        self.last_name = kwargs['last_name']
-        self.date_of_birth = kwargs['date_of_birth']
-        self.address = kwargs['address']
-        self.email = kwargs['email']
-        self.password = ModelHelper.hash_password(kwargs['password'])
-        self.phone_number = kwargs['phone_number']
-        self.company = kwargs['company']
-        db.session.commit()
-        return self
 
     @classmethod
     def get_driver_by_id(self, driver_id):
@@ -85,25 +85,38 @@ class Driver(BaseModel, db.Model):
 class DriversPool(BaseModel, db.Model):
     __tablename__ = 'drivers_pool'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    driver_id = db.Column(db.String(255), db.ForeignKey(Driver.__tablename__ + '.driver_id'), nullable=False)
+    driver_id = db.Column(db.String(255), 
+        db.ForeignKey(Driver.__tablename__ + '.driver_id'), nullable=False, unique=True)
     driver = db.relationship(Driver.__name__,
                              backref=db.backref(__tablename__, lazy='dynamic'))
     capacity = db.Column(db.Integer, nullable=False)
-    current_passengers = db.Column(db.Integer, default=0)  # This refer to number of passenger the driver has
+    current_passengers = db.Column(db.Integer)  # This refer to number of passenger the driver has
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
 
-    def __init__(self, driver, capacity, latitude, longitude):
+    def __init__(self, driver, capacity, latitude, longitude, current_psgr=0):
         self.driver = driver
+        self.driver_id = driver.driver_id
         self.capacity = capacity
         self.latitude = latitude
         self.longitude = longitude
+        self.current_passengers = current_psgr
 
     def __repr__(self):
         return "<In Driver Pool: %s>" % self.driver.get_full_name()
 
     def get_coordinates(self):
         return (self.latitude, self.longitude)
+
+    def get_dict(self):
+        return {
+            'id': self.id,
+            'driver_id': self.driver_id,
+            'capacity': self.capacity,
+            'current_psgr': self.current_passengers,
+            'lat': self.latitude,
+            'lng': self.longitude
+        }
 
     @staticmethod
     def get_available_driver(request):
@@ -123,6 +136,19 @@ class DriversPool(BaseModel, db.Model):
     @staticmethod
     def get_by_driver(driver):
         return DriversPool.query.filter_by(driver_id=driver.driver_id).first()
+
+    @staticmethod
+    def get_by_driver_id(drv_id):
+        return DriversPool.query.filter_by(driver_id=drv_id).first()
+
+    @staticmethod
+    def get_by_id(id):
+        return DriversPool.query.filter_by(id=id).first()
+
+    @staticmethod
+    def build_from_args(**kwargs):
+        driver = Driver.get_driver_by_id(kwargs['driver_id'])
+        return DriversPool(driver, kwargs['capacity'], kwargs['lat'], kwargs['lng'], kwargs['current_psgr']).create()
 
     def update_current_capacity(self, n):
         self.current_passengers += n

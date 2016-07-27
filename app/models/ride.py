@@ -39,7 +39,11 @@ class Ride(BaseModel, db.Model):
 
     @classmethod
     def get_ride_by_driver(driver):
-        return Ride.query.filter_by(Ride.driver_id == driver.driver_id).first()
+        return Ride.query.filter_by(driver_id=driver.driver_id).first()
+
+    @staticmethod
+    def get_by_id(id):
+        return Ride.query.fitler_by(id=id).first()
 
     def update_status(self, status):
         self.status = status

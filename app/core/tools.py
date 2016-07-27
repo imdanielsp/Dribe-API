@@ -8,17 +8,17 @@ from app.models.settings import Settings
 
 
 class ModelHelper:
-    @staticmethod
-    def get_unique_id():
-        return str(uuid.uuid4())
+	@staticmethod
+	def get_unique_id():
+		return str(uuid.uuid4())
 
-    @staticmethod
-    def hash_password(password):
-        return generate_password_hash(password)
+	@staticmethod
+	def hash_password(password):
+		return generate_password_hash(password)
 
-    @staticmethod
-    def check_hash(password, hash):
-        return check_password_hash(hash, password)
+	@staticmethod
+	def check_hash(password, hash):
+		return check_password_hash(hash, password)
 
 
 class MathHelper:
@@ -66,10 +66,6 @@ class MathHelper:
 	@staticmethod
 	def _meters_to_miles(meters):
 		return meters * MathHelper.__MILE_FACTOR__
-
-
-
-
 
 
 

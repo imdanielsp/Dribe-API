@@ -11,6 +11,9 @@ class BaseModel():
         db.session.delete(self)
         db.session.commit()
 
+    def save(self):
+        db.session.commit()
+
     def get_dict(self):
     	raise NotImplementedError
 
