@@ -6,6 +6,7 @@ import faker
 from app.models.driver import Driver
 from app.models.passenger import Passenger
 from app.models.request import Request
+from app.models.ride import Ride
 from app.core.tools import ModelHelper
 from app.core.core import DriverHandler
 
@@ -69,3 +70,7 @@ class ModelFactory:
     @staticmethod
     def make_driver_offline(driver):
         return DriverHandler.make_driver_offline(driver)
+
+    @staticmethod
+    def create_ride(request, passenger, driver):
+        return Ride(request, passenger, driver)

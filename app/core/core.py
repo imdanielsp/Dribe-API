@@ -39,14 +39,14 @@ class RideHandler:
 	@staticmethod
 	def update_ride_status(ride, status):
 		driver_pool = DriversPool.get_by_driver(ride.driver)
-		if status is Ride.RIDE_COMPLETED:
+		if status == Ride.RIDE_COMPLETED:
 			CompletedRides(ride).create()
 			driver_pool.update_current_capacity(-ride.request.number_of_passenger)
-		elif status is Ride.RIDE_CANCELED:
+		elif status == Ride.RIDE_CANCELED:
 			CancelledRides(ride).create()
-		elif status is Ride.RIDE_ACTIVE: 
+		elif status == Ride.RIDE_ACTIVE: 
 			driver_pool.update_current_capacity(ride.request.number_of_passenger)
-		elif status is Ride.RIDE_PROCESSING:
+		elif status == Ride.RIDE_PROCESSING:
 			pass
 		else:
 			error_msg = "{} is an invalid status".format(status)

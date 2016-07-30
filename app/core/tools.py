@@ -1,10 +1,34 @@
 import uuid
 import math
+import warnings
+import functools
 
 from flask_bcrypt import generate_password_hash, check_password_hash
 
 from app.google.matrix import MatrixApi
 from app.models.settings import Settings
+
+
+def deprecated(func):
+	"""
+	This is a decorator which can be used to mark functions
+	as depreacated. It will result in warning beign emitted when
+	the function is used. 
+	Source url: https://wiki.python.org/moin/
+	PythonDecoratorLibrary#Smart_deprecation_warnings_.
+	28with_valid_filenames.2C_line_numbers.2C_etc..29
+	"""
+
+	@functools.wraps(func)
+	def new_func(*args, **kwargs):
+		warnings.warn_explicit(
+			"Call to deprecated function {}.".format(func.__name__),
+			category=DeprecationWarning,
+			filename=func.func_code.co_filename,
+			lineno=func.func_code.co_firstlineno + 1
+		)
+		return func(*args, **kwargs)
+	return new_func
 
 
 class ModelHelper:

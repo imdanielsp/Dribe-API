@@ -69,12 +69,18 @@ class PassengerParser:
 
 
 class PassengerRes(Resource):
+	"""
+	This resource handle a passenger in specifics
+	"""
 	def __init__(self):
 		self.parser = PassengerParser().build()
 		super().__init__()
 
 	@auth.login_required
 	def get(self, passenger_id):
+		"""
+		Return a passenger infor base on id passed.
+		"""
 		psgr = Passenger.get_by_id(passenger_id)
 		if psgr is None:
 			return Response(NOT_FOUND_MSG, status=404, mimetype=JSON_TYPE)
@@ -90,6 +96,9 @@ class PassengerRes(Resource):
 
 	@auth.login_required
 	def put(self, passenger_id):
+		"""
+		Modify passenger information.
+		"""
 		args = self.parser.parse_args()
 		psgr = Passenger.get_by_id(passenger_id)
 		if psgr is None:
@@ -106,6 +115,9 @@ class PassengerRes(Resource):
 
 	@auth.login_required
 	def delete(self, passenger_id):
+		"""
+		Delete a passenger.
+		"""
 		psgr = Passenger.get_by_id(passenger_id)
 		if psgr is None:
 			return Response(NOT_FOUND_MSG, status=404, mimetype=JSON_TYPE)
@@ -115,12 +127,18 @@ class PassengerRes(Resource):
 
 
 class PassengerListRes(Resource):
+	"""
+	This resource handle the passenger as list and passenger creation
+	"""
 	def __init__(self):
 		self.parser = PassengerParser().build()
 		super().__init__()
 
 	@auth.login_required
 	def get(self):
+		"""
+		Return a json response of the list of passengers
+		"""
 		psgrs = Passenger.get_all()
 		psgr_list = [marshal(psgr, psgr_fields) for psgr in psgrs]
 		json_resp = json.dumps({'data': psgr_list}, indent=4)
@@ -129,6 +147,9 @@ class PassengerListRes(Resource):
 
 	@auth.login_required
 	def post(self):
+		"""
+		Creates a new passenger
+		"""
 		args = self.parser.parse_args()
 		psgr = Passenger.build_from_args(args)
 		json_resp = json.dumps(

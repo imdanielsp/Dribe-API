@@ -1,19 +1,13 @@
 import json
 
 from sqlalchemy.exc import IntegrityError
-from flask import Blueprint, Response, jsonify
+from flask import Blueprint, Response
 from flask_restful import (Resource, Api, reqparse, fields, 
                             marshal, inputs)
 
+from .base import *
 from app.models.driver import Driver, DriversPool
 from app.auth.auth import auth
-
-
-JSON_TYPE = 'application/json'
-NOT_FOUND_MSG = '{"message": "The requested record was not found.", "status": "ERROR"}'
-OK_MSG = '{"message": "OK"}'
-DRIVER_ONLINE = '{"status": "ONLINE", "lat": %f, "lng": %f}'
-DRIVER_OFFLINE = '{"status": "OFFLINE"}'
 
 driver_fields = {
     'id': fields.Integer,
@@ -157,6 +151,12 @@ class DriversListRes(Resource):
 
 
 class DriverPoolRes(Resource):
+    """
+    This Resource is the driver pool,
+    GET: return is driver is ONLINE or OFFLINE
+    POST: make driver ONLINE
+    DELETE: make a driver OFFLINE
+    """
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument(
@@ -193,6 +193,10 @@ class DriverPoolRes(Resource):
 
     @auth.login_required
     def get(self, drv_id):
+        """
+        param: driver_id
+        Return information about the driver's status, ONLINE or OFFLINE
+        """
         drv_pool = DriversPool.get_by_driver_id(drv_id)
         if drv_pool:
             resp_data = DRIVER_ONLINE % (drv_pool.latitude, drv_pool.longitude)
@@ -203,14 +207,27 @@ class DriverPoolRes(Resource):
 
     @auth.login_required
     def post(self):
+        """
+        Make a driver online given information via HTTP json forms
+        """
         args = self.parser.parse_args()
-        drv_pool = DriversPool.build_from_args(**args).create()
-        json_resp = json.dumps({'data': drv_pool.get_dict()})
-        resp = Response(json_resp, status=201, mimetype=JSON_TYPE)
-        return resp
+        try:
+            drv_pool = DriversPool.build_from_args(**args).create()
+        except IntegrityError:
+            msg = json.dumps({'message': 'Driver is already online.'})
+            resp = Response(msg, status=200, mimetype=JSON_TYPE)
+            return resp
+        else:
+            json_resp = json.dumps({'data': drv_pool.get_dict()})
+            resp = Response(json_resp, status=201, mimetype=JSON_TYPE)
+            return resp
 
     @auth.login_required
     def delete(self, drv_id):
+        """
+        param: driver_id
+        Make a driver offline given the passed ID.
+        """
         drv_pool = DriversPool.get_by_driver_id(drv_id)
         if drv_pool is None:
             return Response(NOT_FOUND_MSG, status=404, mimetype=JSON_TYPE)
@@ -220,6 +237,9 @@ class DriverPoolRes(Resource):
 
 
 class DriverPoolsUpdateRes(Resource):
+    """
+    This resource update the driver's location.
+    """
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument(
@@ -238,6 +258,9 @@ class DriverPoolsUpdateRes(Resource):
 
     @auth.login_required
     def put(self, drv_id):
+        """
+        Update the driver's location
+        """
         args = self.parser.parse_args()
         drv_pool = DriversPool.get_by_driver_id(drv_id)
         if drv_pool is None:

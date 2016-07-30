@@ -2,7 +2,7 @@ import datetime
 import uuid
 
 from app.models.base import db, BaseModel
-from app.core.tools import ModelHelper
+from app.core.tools import ModelHelper, deprecated
 
 
 class Passenger(BaseModel, db.Model):
@@ -31,6 +31,7 @@ class Passenger(BaseModel, db.Model):
     def __repr__(self):
         return "<Passenger: %s %s>" % (self.first_name, self.last_name)
 
+    @deprecated
     def update(self, **kwargs):
         self.first_name = kwargs['first_name']
         self.last_name = kwargs['last_name']
@@ -57,6 +58,17 @@ class Passenger(BaseModel, db.Model):
             'date_joined': self.date_joined,
             'is_active': self.is_active
         }
+
+    @staticmethod
+    def build_from_args(**kwargs):
+        return Passenger(
+            kwargs['first_name'], 
+            kwargs['last_name'], 
+            kwargs['date_of_birth'], 
+            kwargs['email'], 
+            kwargs['password'], 
+            kwargs['phone_number']
+        ).create()
 
     @staticmethod
     def get_by_id(passenger_id):

@@ -1,8 +1,8 @@
 import datetime
 import json
 
-from app.models.base import db, BaseModel
-from app.core.tools import ModelHelper
+from app.models.base import db, BaseModel, LAZY
+from app.core.tools import ModelHelper, deprecated
 
 
 class Driver(BaseModel, db.Model):
@@ -34,6 +34,7 @@ class Driver(BaseModel, db.Model):
     def __repr__(self):
         return "<Driver: ID=%s Name=%s_%s>" % (self.driver_id, self.first_name, self.last_name)
     
+    @deprecated
     def update(self, **kwargs):
         self.first_name = kwargs['first_name']
         self.last_name = kwargs['last_name']
@@ -88,7 +89,7 @@ class DriversPool(BaseModel, db.Model):
     driver_id = db.Column(db.String(255), 
         db.ForeignKey(Driver.__tablename__ + '.driver_id'), nullable=False, unique=True)
     driver = db.relationship(Driver.__name__,
-                             backref=db.backref(__tablename__, lazy='dynamic'))
+                             backref=db.backref(__tablename__, lazy=LAZY))
     capacity = db.Column(db.Integer, nullable=False)
     current_passengers = db.Column(db.Integer)  # This refer to number of passenger the driver has
     latitude = db.Column(db.Float, nullable=False)

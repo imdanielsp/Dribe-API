@@ -11,6 +11,7 @@ db = SQLAlchemy(app)
 from app.res.driver import driver_api
 from app.res.user import user_api
 from app.res.passenger import passenger_api
+from app.res.request import request_api
 from app.res.ride import ride_api
 
 #   API Models Imports
@@ -29,10 +30,16 @@ from app.core.tools import MathHelper
 app.register_blueprint(driver_api, url_prefix=config.URL_PREFIX)
 app.register_blueprint(user_api, url_prefix=config.URL_PREFIX)
 app.register_blueprint(passenger_api, url_prefix=config.URL_PREFIX)
+app.register_blueprint(request_api, url_prefix=config.URL_PREFIX)
 app.register_blueprint(ride_api, url_prefix=config.URL_PREFIX)
 
 
 @app.route('/')
 def index():
-    from tests.tools import ModelFactory
-    return "Index"
+	from tests.tools import ModelFactory    
+	psgr = ModelFactory.get_passenger().create()
+	drv = ModelFactory.get_driver().create()
+	request = ModelFactory.get_request(psgr).create()
+	ModelFactory.make_driver_online(drv)
+	ride = ModelFactory.create_ride(request, psgr, drv).create()
+	return ride.__repr__()

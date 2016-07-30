@@ -13,6 +13,82 @@ from app.models.driver import Driver, DriversPool
 
 AUTH = config.AUTH
 
+
+class TestDriverModel(unittest.TestCase):
+	def setUp(self):
+		pass
+
+	def tearDown(self):
+		pass
+
+	def test_update_complete_info(self):
+		pass
+
+	def test_update_missing_info(self):
+		pass
+
+	def test_get_driver_by_id_correct(self):
+		pass
+
+	def test_get_driver_by_id_fake(self):
+		pass
+
+	def test_build_from_args_complete(self):
+		pass
+
+	def test_build_from_args_incomplete(self):
+		pass
+
+
+class TestDriversPoolModel(unittest.TestCase):
+	def test_get_coordinates(self):
+		pass
+
+	def test_get_available_driver(self):
+		pass
+
+	def test_get_driver_by_id_correct(self):
+		pass
+
+	def test_get_driver_by_id_fake(self):
+		pass
+
+	def test_get_by_id_correct(self):
+		pass
+
+	def test_get_by_id_fake(self):
+		pass
+
+	def test_get_by_driver_correct(self):
+		pass
+
+	def test_get_by_driver_fake(self):
+		pass
+
+	def test_build_from_args_complete(self):
+		pass
+
+	def test_build_from_args_incomplete(self):
+		pass
+
+	def test_update_current_capacity(self):
+		pass
+
+	def test_update_current_capacity_with_number_greater_capacity(self):
+		pass
+
+
+class TestRequestQueue(unittest.TestCase):
+	def test_get_first(self):
+		pass
+
+	def test_get_by_request(self):
+		pass
+
+
+class TestPassengerModel(unittest.TestCase):
+	def test_update
+
 class TestRideHandler(unittest.TestCase):
 	"""
 	Unittest for the RideHandler

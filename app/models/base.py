@@ -1,5 +1,7 @@
 from app import db
 
+LAZY = 'dynamic'
+
 
 class BaseModel():
     def create(self):
