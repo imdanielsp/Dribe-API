@@ -2,8 +2,8 @@ import json
 
 from sqlalchemy.exc import IntegrityError
 from flask import Blueprint, Response
-from flask_restful import (Resource, Api, reqparse, fields, 
-                            marshal, inputs)
+from flask_restful import (Resource, Api, reqparse, fields,
+                           marshal, inputs)
 
 from .base import *
 from app.models.driver import Driver, DriversPool
@@ -21,6 +21,7 @@ driver_fields = {
     'date_joined': fields.String,
     'company': fields.String
 }
+
 
 class DriverParser:
     def __init__(self):
@@ -91,10 +92,12 @@ class DriversRes(Resource):
         else:
             driver_info = marshal(driver.get_dict(), driver_fields)
             json_resp = json.dumps(
-                {'data': 
-                    { Driver.__tablename__: driver_info }
-                },
-            indent=4)
+                {
+                    'data':
+                    {
+                        Driver.__tablename__: driver_info
+                    }
+                }, indent=4)
             resp = Response(json_resp, status=200, mimetype=JSON_TYPE)
             return resp
 
@@ -107,10 +110,12 @@ class DriversRes(Resource):
         else:
             driver.update(**args)
             json_resp = json.dumps(
-                {'data': 
-                    { Driver.__tablename__: marshal(driver.get_dict(), driver_fields)}
-                },
-            indent=4)
+                {
+                    'data':
+                    {
+                        Driver.__tablename__: marshal(driver.get_dict(), driver_fields)
+                    }
+                }, indent=4)
             resp = Response(json_resp, status=200, mimetype=JSON_TYPE)
             return resp
 
@@ -129,7 +134,7 @@ class DriversListRes(Resource):
         self.parser = DriverParser().build()
         super().__init__()
 
-    @auth.login_required    
+    @auth.login_required
     def get(self):
         drivers = Driver.get_all()
         driver_list = [marshal(driver, driver_fields) for driver in drivers]
@@ -142,10 +147,12 @@ class DriversListRes(Resource):
         args = self.parser.parse_args()
         driver = Driver.build_from_args(**args)
         json_resp = json.dumps(
-            {'data': 
-                { Driver.__tablename__: marshal(driver, driver_fields)}
-            },
-        indent=4)
+            {
+                'data':
+                {
+                    Driver.__tablename__: marshal(driver, driver_fields)
+                }
+            }, indent=4)
         resp = Response(json_resp, status=201, mimetype=JSON_TYPE)
         return resp
 
@@ -157,6 +164,7 @@ class DriverPoolRes(Resource):
     POST: make driver ONLINE
     DELETE: make a driver OFFLINE
     """
+
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument(
@@ -188,14 +196,14 @@ class DriverPoolRes(Resource):
             type=float,
             help="Longitude was not provided",
             required=True
-        )   
+        )
         super().__init__()
 
     @auth.login_required
     def get(self, drv_id):
         """
-        param: driver_id
         Return information about the driver's status, ONLINE or OFFLINE
+        :param drv_id:
         """
         drv_pool = DriversPool.get_by_driver_id(drv_id)
         if drv_pool:
@@ -203,7 +211,6 @@ class DriverPoolRes(Resource):
             return Response(resp_data, status=200, mimetype=JSON_TYPE)
         else:
             return Response(DRIVER_OFFLINE, status=200, mimetype=JSON_TYPE)
-
 
     @auth.login_required
     def post(self):
@@ -225,8 +232,8 @@ class DriverPoolRes(Resource):
     @auth.login_required
     def delete(self, drv_id):
         """
-        param: driver_id
         Make a driver offline given the passed ID.
+        :param drv_id:
         """
         drv_pool = DriversPool.get_by_driver_id(drv_id)
         if drv_pool is None:
@@ -240,6 +247,7 @@ class DriverPoolsUpdateRes(Resource):
     """
     This resource update the driver's location.
     """
+
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument(
@@ -265,7 +273,7 @@ class DriverPoolsUpdateRes(Resource):
         drv_pool = DriversPool.get_by_driver_id(drv_id)
         if drv_pool is None:
             return Response(NOT_FOUND_MSG, status=404, mimetype=JSON_TYPE)
-        else:            
+        else:
             drv_pool.latitude = args['lat']
             drv_pool.longitude = args['lng']
             drv_pool.save()

@@ -3,7 +3,9 @@ from app import db
 LAZY = 'dynamic'
 
 
-class BaseModel():
+class BaseModel:
+    abstract = True
+
     def create(self):
         db.session.add(self)
         db.session.commit()
@@ -17,8 +19,8 @@ class BaseModel():
         db.session.commit()
 
     def get_dict(self):
-    	raise NotImplementedError
+        raise NotImplementedError
 
     @staticmethod
     def build_from_args(**kwargs):
-    	raise NotImplementedError
+        raise NotImplementedError

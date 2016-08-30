@@ -1,8 +1,7 @@
 import datetime
-import json
 
 from app.models.base import db, BaseModel, LAZY
-from app.core.tools import ModelHelper, deprecated
+from app.core.tools import ModelHelper
 
 
 class Driver(BaseModel, db.Model):
@@ -33,8 +32,7 @@ class Driver(BaseModel, db.Model):
 
     def __repr__(self):
         return "<Driver: ID=%s Name=%s_%s>" % (self.driver_id, self.first_name, self.last_name)
-    
-    @deprecated
+
     def update(self, **kwargs):
         self.first_name = kwargs['first_name']
         self.last_name = kwargs['last_name']
@@ -51,9 +49,7 @@ class Driver(BaseModel, db.Model):
         return "{} {}".format(self.first_name, self.last_name)
 
     def get_dict(self):
-        return {
-                    'id': self.id,
-                    'driver_id': self.driver_id,
+        return {'id': self.id, 'driver_id': self.driver_id,
                     'first_name': self.first_name,
                     'last_name': self.last_name,
                     'date_of_birth': self.date_of_birth.__str__(),
@@ -107,7 +103,7 @@ class DriversPool(BaseModel, db.Model):
         return "<In Driver Pool: %s>" % self.driver.get_full_name()
 
     def get_coordinates(self):
-        return (self.latitude, self.longitude)
+        return self.latitude, self.longitude
 
     def get_dict(self):
         return {

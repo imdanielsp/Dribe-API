@@ -71,14 +71,15 @@ class Ride(BaseModel, db.Model):
         return self
 
     @classmethod
-    def get_ride_by_driver(driver):
+    def get_ride_by_driver(cls, driver):
         return Ride.query.filter_by(driver_id=driver.driver_id).first()
 
     @staticmethod
-    def get_by_id(id):
-        return Ride.query.filter_by(id=id).first()
+    def get_by_id(ride_id):
+        return Ride.query.filter_by(id=ride_id).first()
 
-    class InvalidStatus(Exception): pass
+    class InvalidStatus(Exception):
+        pass
 
 
 class CompletedRides(BaseModel, db.Model):

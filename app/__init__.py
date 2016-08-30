@@ -1,11 +1,14 @@
-from flask import Flask
+from flask import Flask, g
 from flask_sqlalchemy import SQLAlchemy
 
 import config
+from app.tasks.tasks import make_celery
 
 app = Flask(__name__)
 app.config.from_object(config)
+
 db = SQLAlchemy(app)
+celery = make_celery(app)
 
 #   API Resources Imports
 from app.res.driver import driver_api
@@ -22,7 +25,7 @@ from app.models.request import Request, RequestQueue
 from app.models.ride import Ride, CompletedRides, CancelledRides
 
 #   API Tools Imports
-from app.core.core import RideHandler, DriverHandler
+from app.core.core import RideHandler, DriverHandler, Application
 from app.google.matrix import MatrixApi
 from app.core.tools import MathHelper
 
@@ -34,12 +37,32 @@ app.register_blueprint(request_api, url_prefix=config.URL_PREFIX)
 app.register_blueprint(ride_api, url_prefix=config.URL_PREFIX)
 
 
-@app.route('/')
-def index():
-	from tests.tools import ModelFactory    
-	psgr = ModelFactory.get_passenger().create()
-	drv = ModelFactory.get_driver().create()
-	request = ModelFactory.get_request(psgr).create()
-	ModelFactory.make_driver_online(drv)
-	ride = ModelFactory.create_ride(request, psgr, drv).create()
-	return ride.__repr__()
+@celery.task()
+def run():
+    Application.run()
+
+
+@app.route('/run')
+def start_app():
+    run.apply_async()
+
+
+@app.route('/make-scenario/<int:scenario>')
+def create_scenario(scenario):
+    from tests.tools import ModelFactory
+    g.data = ModelFactory.make_scenario(scenario)
+    if g.data:
+        return "Scenario created"
+    else:
+        return "An error occurred"
+
+
+@app.route('/delete-scenarios')
+def delete_scenarios():
+    if g.data:
+        for obj in g.data:
+            obj.delete()
+        g.data = None
+        return "Deleted"
+    else:
+        return "No scenarios created before"

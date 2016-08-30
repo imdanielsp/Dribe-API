@@ -1,4 +1,5 @@
 import os
+import datetime
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 API_VERSION = '1'
@@ -10,7 +11,7 @@ DEBUG = True
 SECRET_KEY = "\x97C,e\xa4\xde'~\x96;?\xa2s\x88u\x8c\xbc\x00\xf6g\xdf\xa29\xcb"
 
 DATABASE_CONFIG = {
-    "DB_NAME": "dribe",
+    "DB_NAME": "dribe-2",
     "USERNAME": "root",
     "PASSWORD": "root",
     "LOCATION": "127.0.0.1",
@@ -25,6 +26,17 @@ GOOGLE_API_KEY = "AIzaSyD-t8oUqqOg7uWTqV6n7zSBmyNluRQyPew"
 
 HTTP_BASIC_AUTH = ("dsantosp12", "dribe1234")
 AUTH = HTTP_BASIC_AUTH
+
+# CELERY CONFIG
+CELERY_BROKER_URL = 'amqp://guest@localhost//'
+CELERY_BACKEND = 'amqp://guest@localhost//'
+CELERY_TIMEZONE = 'America/New_York'
+CELERYBEAT_SCHEDULE = {
+    'check-request-every-0.5-seconds':{
+        'task': 'app.run',
+        'schedule': datetime.timedelta(seconds=0.5)
+    }
+}
 
 
 def reset_system(db):

@@ -9,4 +9,4 @@ DRIVER_OFFLINE = '{"status": "OFFLINE"}'
 
 
 def get_not_found_response():
-	return Response(NOT_FOUND_MSG, status=404, mimetype=JSON_TYPE)
+    return Response(NOT_FOUND_MSG, status=404, mimetype=JSON_TYPE)
